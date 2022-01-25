@@ -4,7 +4,7 @@ outcome[, 11] <- as.numeric(outcome[, 11])
 hist(outcome[, 11])
 
 
-##Cleaned test and experimental variables. Function best inputs State Abrv. and a disease,
+##Function best inputs State Abrv. and a disease,
 ##it will return the name of the hospital with the lowest given disease mortality rate
 ##in that state. It will return error mssgs if inputs are not well written as requested.
 best <- function(state, outcome) {
@@ -13,14 +13,14 @@ best <- function(state, outcome) {
   ## Check that state and outcome are valid
   
   if (isTRUE(outcome!="heart attack" & outcome!="heart failure"& outcome!="pneumonia")&isTRUE(any(file$State==state)==FALSE)){
-  return ("invalid state and invalid outcome")  
+    stop ("invalid state and invalid outcome")  
   }
   
   if (any(file$State==state)==FALSE){
-    return ("invalid state")
+    stop ("invalid state")
   }
   if (outcome!="heart attack" & outcome!="heart failure"& outcome!="pneumonia"){
-    return("invalid outcome")
+    stop("invalid outcome")
   }
   
   ## Return hospital name in that state with lowest 30-day death
