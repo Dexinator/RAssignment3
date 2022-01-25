@@ -3,6 +3,10 @@ head(outcome)
 outcome[, 11] <- as.numeric(outcome[, 11])
 hist(outcome[, 11])
 
+
+##Cleaned test and experimental variables. Function best inputs State Abrv. and a disease,
+##it will return the name of the hospital with the lowest given disease mortality rate
+##in that state. It will return error mssgs if inputs are not well written as requested.
 best <- function(state, outcome) {
   ## Read outcome data
   file <- read.csv("outcome-of-care-measures.csv")
