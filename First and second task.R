@@ -34,9 +34,11 @@ best <- function(state, outcome) {
   Hospital_RATE<-reduced_data[which(reduced_data[,2] == min(reduced_data[,2], na.rm = TRUE)),]
   Hospital_NAME<-Hospital_RATE[,1]
   if (length(Hospital_NAME)>1){
-    Hospitals<-order(Hospital_NAME)
+    Hospitals<-Hospital_NAME[order(Hospital_NAME)]
     Hospitals[1]
-  }else
-    Hospital_NAME
+  }
+  else{
+    Hospital_NAME}
 }
-best("TX","heart attack")
+best("WA","pneumonia")
+
