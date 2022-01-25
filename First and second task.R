@@ -2,33 +2,37 @@ outcome <- read.csv("outcome-of-care-measures.csv")
 head(outcome)
 outcome[, 11] <- as.numeric(outcome[, 11])
 hist(outcome[, 11])
-with(outcome, State=="AL")
-outcome[,outcome$State["AL"]]
-test<-outcome[,outcome$State["AL"]]
-
-which(colnames(outcome) == "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack") 
-which(colnames(outcome) == "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure") 
-which(colnames(outcome) == "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia") 
-
-outcome_w_state<-outcome[outcome$State=='AL',]
-mortality<-outcome_w_state[,11]
-
-outcome_w_state[,11]
-mortality
-min(mortality,na.rm = TRUE)
-
 
 best <- function(state, outcome) {
   ## Read outcome data
   file <- read.csv("outcome-of-care-measures.csv")
   ## Check that state and outcome are valid
   
+  if (isTRUE(outcome!="heart attack" & outcome!="heart failure"& outcome!="pneumonia")&isTRUE(any(file$State==state)==FALSE)){
+  return ("invalid state and invalid outcome")  
+  }
+  
+  if (any(file$State==state)==FALSE){
+    return ("invalid state")
+  }
+  if (outcome!="heart attack" & outcome!="heart failure"& outcome!="pneumonia"){
+    return("invalid outcome")
+  }
+  
   ## Return hospital name in that state with lowest 30-day death
   ## rate
   column<-NULL
-  if (outcome=="heart attack"){column<-11}else if(outcome=="heart failure"){column<-17}else if(outcome=="pneumonia"){column<-23}
-  file_w_state<-file[file$State==state,]
-  mortality<-file_w_state[,column]
-  lowest_rate<-min(mortality,na.rm = TRUE)
+  DIS_HA<-"Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"
+  DIS_HF<-"Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure"
+  DIS_PN<-"Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
+  if (outcome=="heart attack"){column<-DIS_HA}else if(outcome=="heart failure"){column<-DIS_HF}else if(outcome=="pneumonia"){column<-DIS_PN}
+  reduced_data<-subset(file, State==state, select=c("Hospital.Name",column))
+  Hospital_RATE<-reduced_data[which(reduced_data[,2] == min(reduced_data[,2], na.rm = TRUE)),]
+  Hospital_NAME<-Hospital_RATE[,1]
+  if (length(Hospital_NAME)>1){
+    Hospitals<-order(Hospital_NAME)
+    Hospitals[1]
+  }else
+    Hospital_NAME
 }
 best("TX","heart attack")
